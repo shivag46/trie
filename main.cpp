@@ -116,7 +116,4 @@ void test(){
 
 int main(){
     test();
-
-    //for(int i=2;i<256;i++)
-    //    printf("case %d:return static_cast<node_x_t<%d>*>(node)->call(args);break; \\\n", i, i);
 }
