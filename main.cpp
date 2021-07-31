@@ -12,10 +12,8 @@ node_t* createNode(char c){
     return (node_t*)temp;
 }
 
-
-
 void add(string key){
-    node_t* nav = ((node_x_t<256>*)root)->children[0];
+    node_t* nav = ((node_x_t<1>*)root)->children[0];
     node_t* prev = root;
     int prevIdx=0;
 
@@ -23,13 +21,13 @@ void add(string key){
     
     for(int i=start;i<key.size();i++){
         int idx = -1;
-
         if(nav==NULL){//case: when the node points to a null value
             nav = createNode(key[i]);
-            ((node_x_t<256>*)prev)->children[prevIdx] = nav;
+            setChildUtil(prevIdx,nav,(void*)prev);
             prevIdx = 0;
 
             prev = nav;
+            cout<<"NEW: "<<((node_x_t<256>*)(nav))->chars[0]<<" ";
             nav = ((node_x_t<256>*)nav)->children[0];
             continue;
         }
@@ -46,66 +44,71 @@ void add(string key){
         if(idx!=-1){//case: when the current node contains a matching character
             prev = nav;
             prevIdx = idx;
-            nav = ((node_x_t<256>*)nav)->children[idx];
+            nav = setObjectUtil(idx, nav);
+            cout<<"HIT: "<<((node_x_t<256>*)(prev))->chars[idx]<<" ";
         }
 
         else{//case: when the size of the current node needs to be increased
-            size_t current = nav->num_elements;
-            node_x_t<256>* temp = assignObject(current);
-            node_x_t<256>* original = ((node_x_t<256>*)nav);
-            for(int i=0;i<nav->num_elements;i++){
-                temp->chars[i] = original->chars[i];
-                temp->children[i] = original->children[i];
-            }
+            node_t* temp = assignObject(nav, key[i]);
 
-            temp->base.num_elements = original->base.num_elements+1;
-            temp->chars[temp->base.num_elements-1] = key[i];
-            temp->children[temp->base.num_elements-1] = NULL;
-            ((node_x_t<256>*)prev)->children[prevIdx] = (node_t*)temp;
+            setChildUtil(prevIdx,temp,(void*)prev);
 
-            prev = ((node_t*)temp);
-            prevIdx = temp->base.num_elements-1;
+            prev = temp;
+            prevIdx = temp->num_elements-1;
 
-            nav = temp->children[temp->base.num_elements-1];
+            nav = setObjectUtil(temp->num_elements-1, temp);
+
+            cout<<"UP:"<<(int)prev->num_elements<<" "<<((node_x_t<256>*)prev)->chars[prev->num_elements-1]<<" ";
         }
     } 
+    cout<<"\n";
 }
 
-int search(string key){
-    node_t* nav = ((node_x_t<256>*)root)->children[0];
-    
-    for(int i=0;i<key.size();i++){
-        int idx = -1;
-        if(nav==NULL){
-            return 0;
-        }
-        size_t nodeSize = (int)nav->num_elements;
-        for(int j = 0;j < nodeSize;j++){
-            node_x_t<256>* temp = (node_x_t<256>*)nav;
-            if(temp->chars[j]==key[i]){
-                idx = j;
-                break;
-            }
-        }
-
-        if(idx!=-1){
-            nav = ((node_x_t<256>*)nav)->children[0];
-        }
-        else
-            return 0;
-    }
-
-    return 1;
-}
 
 void test(){
-    root=createNode('\0');
+    root=createNode('0');
+    add("a");
+    add("ab");
+    add("abc");
+    add("q");
+    add("qw");
+    add("qwe");
+    add("qwer");
+    add("qwert");
+    add("qwerty");
+    add("qwertyu");
+    add("qwertyui");
+    add("qwertyuio");
+    add("qwertyuiop");
+    add("qwertyuiopa");
+    add("qwertyuiopas");
+    add("qwertyuio");
+    add("qwert");
+    add("qwertyuiopasdfghj");
     add("sdf");
-    add("sdfgh");
+    add("sdfghlop");
     add("sdfa");
     add("sdfab");
     add("sha");
     add("swq");
+    add("shas");
+    add("solar");
+    add("sol");
+    add("sdfgh");
+    add("sdfghl");
+    add("selenium");
+    add("sdfghloppos");
+    add("sdfghlopues");
+    add("soda");
+    add("sodar");
+    add("sdfghlopwes");
+    add("asd");
+    add("sodar");
+    add("sdfghloppos");
+    add("barrister");
+    add("barricade");
+    add("barricader");
+    add("barricadsdef");
 }
 
 int main(){
