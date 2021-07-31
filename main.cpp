@@ -44,26 +44,25 @@ void add(string key){
         if(idx!=-1){//case: when the current node contains a matching character
             prev = nav;
             prevIdx = idx;
-            nav = setObjectUtil(idx, nav);
+            nav = setObjectUtil(idx, (void*)nav);
             cout<<"HIT: "<<((node_x_t<256>*)(prev))->chars[idx]<<" ";
         }
 
         else{//case: when the size of the current node needs to be increased
-            node_t* temp = assignObject(nav, key[i]);
+            node_t* temp = assignObject((void*)nav, key[i]);
 
             setChildUtil(prevIdx,temp,(void*)prev);
 
             prev = temp;
             prevIdx = temp->num_elements-1;
 
-            nav = setObjectUtil(temp->num_elements-1, temp);
+            nav = setObjectUtil(temp->num_elements-1, (void*)temp);
 
             cout<<"UP:"<<(int)prev->num_elements<<" "<<((node_x_t<256>*)prev)->chars[prev->num_elements-1]<<" ";
         }
     } 
     cout<<"\n";
 }
-
 
 void test(){
     root=createNode('0');
@@ -109,8 +108,15 @@ void test(){
     add("barricade");
     add("barricader");
     add("barricadsdef");
+    add("test");
+    add("testing");
+    add("testuion");
+    add("qwertyuiopasdfghj");
 }
 
 int main(){
     test();
+
+    //for(int i=2;i<256;i++)
+    //    printf("case %d:return static_cast<node_x_t<%d>*>(node)->call(args);break; \\\n", i, i);
 }
